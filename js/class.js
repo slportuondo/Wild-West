@@ -19,11 +19,14 @@ class Player {
   }
   shoot(enemy){
     enemy.shield --;
+    this.vulnerability = true;
   }
   reload(){
     this.ammo ++;
+    this.vulnerability = true;
   }
   shield() {
     this.shield --;
+    this.vulnerability = false;
   }
 }
