@@ -1,32 +1,26 @@
 class Player {
   constructor(number){
-    this.player = number;
-    this.alive = true;
-    this.vulnerability = false;
+    this.name = number;
+    this.isAlive = true;
+    this.isVulnerable = true;
     this.shield = 3; //Indicates number of shields, whether or not shield was used last turn
-    this.ammo = 1;
+    this.ammo = 100;
     this.action = '';
   }
   shoot(enemy){
-    this.vulnerability = true;
-    this.shield = 3;
     this.ammo--;
-    if (enemy.vulnerability === true) {
-      enemy.alive = false;
+    if (enemy.isVulnerable == true) {
+      enemy.isAlive = false;
     }
+    this.shield = 3;
   }
   reload(){
-    this.vulnerability = true;
-    this.shield = 3;
     this.ammo ++;
+    this.shield = 3;
   }
-  shield(){
-    // Reload shields if they weren't used last turn
-    if (this.shield[0] > 0) {
-      this.shield[0] --;
-      this.vulnerability = false;
-    } else {
-      this.vulnerability = true;
+  useShield(){
+    if (this.shield > 0) {
+      this.shield --;
     }
   }
 }

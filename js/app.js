@@ -1,15 +1,16 @@
-console.log('hello world');
+  //console.log('hello world');
   // Function to clear keypresses at the end of a match
   // Function to
   // Function to increase points
   // Funtion to increase round number
 const game = {
   players: [],   // Array of player objects
-  score: [0,0],
-  round: 0,
-  timer: '',   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
+  points: [0,0],
+  round: null,
+  timer: 0,   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
   canChoose: false,
-  startGame() {
+  countdown: null,
+  newGame() {
     for (let i = 0; i < 2; i++) {
       let addPlayer = new Player(i);
       this.players.push(addPlayer);
@@ -18,116 +19,166 @@ const game = {
   },
   startCountdown() {
     this.timer = 3;
-    // Funtion to create timer that stops after 3 seconds
-    let countdown = setInterval(() => {
+    // Function to create timer that stops after 3 seconds
+    this.countdown = setInterval(() => {
       $('#timer').text(this.timer);
+      //console.log(this.timer);
       this.canChoose = true;
       if (typeof(this.timer) === 'number'){
         this.timer--;
       }
       if (this.timer === 0) {
-        this.timer = '';
-      } else if (this.timer === ''){
-        clearInterval(countdown);
+        this.timer = 'GO';
+      } else if (this.timer === 'GO'){
+        clearInterval(this.countdown);
         this.canChoose = false;
+        this.verifyAction(0);
+        this.verifyAction(1);
+        this.editPlayersVulnerability();
+        this.doAction(0);
+        this.doAction(1);
+        this.findMatchWinner();
       }
-    }, 1000);
+    }, 500);
     // Call selected / verified action of both players after timer ends
-    this.doAction(0);
-    this.doAction(1)
+
   },
-  translateKeypress(pressedKey){
+  keypressToAction(pressedKey){
+    //console.log('keypressToAction-------------');
     if (game.canChoose === true) {
       switch (pressedKey) {
         case 65: //Player 1 hits 'a' key (reload)
-        game.player[0].action = 'reload';
-        this.verifyAction(0);
-        break;
+          this.players[0].action = 'reload';
+          break;
         case 83: // Player 1 hits 'S' key (shield)
-        game.player[0].action = 'shield';
-        this.verifyAction(0);
-        break;
+          this.players[0].action = 'shield';
+          break;
         case 68: // Player 1 hits 'D' key (shoot)
-        game.player[0].action = 'shoot';
-        this.verifyAction(0);
-        break;
+          this.players[0].action = 'shoot';
+          //console.log('1 Shot');
+          //console.log(this.players[0].action);
+          break;
         case 37: // Player 2 hits left arrow key (shoot)
-        game.player[1].action = 'shoot';
-        this.verifyAction(1);
-        break;
+          this.players[1].action = 'shoot';
+          //console.log('2 Shot');
+          //console.log(this.players[1].action);
+          break;
         case 40: // Player 2 hits down arrow key (shoot)
-        game.player[1].action = 'shield';
-        this.verifyAction(1);
-        break;
+          this.players[1].action = 'shield';
+          break;
         case 39: //Player 2 hits right arrow key (reload)
-        game.player[1].action = 'reload';
-        this.verifyAction(1);
+          this.players[1].action = 'reload';
         break;
-        default: return;
       }
     }
   },
   verifyAction(playerNum) {
-    const player = game.players[playerNum];
-    console.log(player);
-    let enemyNum = null;
-    if (playerNum === 0) {
-      enemyNum = 1;
+    // //console.log('verifyAction------------');
+    const player = this.players[playerNum];
+    if (player.action == 'shoot' && player.ammo == 0) {
+        player.action = 'shield';
+        $('.debugger').append(`<h3>Player ${player.name+ 1} tried to shoot with no ammo defaulted to shield, shield at ${player.shield}</h3>`);
+        // Error sound needed
+    } else if (player.action == 'reload' && player.ammo == 2) {
+        player.action = 'shield';
+        $('.debugger').append(`<h3>Player ${player.name+ 1} tried to reload with full ammo, defaulted to shield, shield at ${player.shield}</h3>`);
+        // Error sound needed
+    } else if (player.action == '') {
+      player.action = 'shield'; $('.debugger').append(`<h3>Player ${player.name + 1} defaulted to shield, shield at ${player.shield}</h3>`);
     } else {
-      enemyNum = 0;
+      $('.debugger').append(`<h3>Player ${player.name + 1} chose to ${player.action}, shield at ${player.shield}</h3>`);
     }
-    console.log(playerNum);
-    console.log(player.action);
-    if (player.action === 'shoot') {
-      if (player.ammo < 1) {
-        player.action = 'shield';
-        // Add error sound later
-      }
-    } else if (action === 'reload') {
-      if (player.ammo > 1) {
-        player.action = 'shield';
-        // Add error sound later
+  },
+  editPlayersVulnerability(){
+    //console.log('editPlayersVulnerability------------');
+    //Edits players' vulnerability before their actions are executed, so that both are able to shoot each other at the same time
+    for (let i = 0; i < 2; i++) {
+      const player = this.players[i];
+      //console.log('this is players action: ' + player.action)
+      if (player.action === 'shield') {
+        if (player.shield < 1) {
+          player.isVulnerable = true;
+          //console.log('no shield left');
+        } else {
+          player.isVulnerable = false;
+        }
       } else {
-        return;
+        player.isVulnerable = true;
       }
+
     }
   },
   doAction(playerNum) {
-    const key = game.player[playerNum].action;
-    switch (key) {
+    //console.log('doAction-----------------');
+    const player = this.players[playerNum];
+    let enemy = null;
+    //console.log('DO' + player.action);
+    if (playerNum == 0) {
+      enemy = this.players[1];
+    } else {
+      enemy = this.players[0];
+    }
+
+    switch (player.action) {
       case 'shoot':
-        game.player[playerNum].shoot();
-      break;
+        this.players[playerNum].shoot(enemy);
+        break;
       case 'reload':
-        game.player[playerNum].reload();
-      break;
+        this.players[playerNum].reload();
+        break;
       case 'shield':
-        game.player[playerNum].shield();
-      break;
-      default: game.player[playerNum].shield();
+        this.players[playerNum].useShield();
+        break;
+      default:
+        this.players[playerNum].useShield();
+        break;
     }
   },
   findMatchWinner(){
+    //console.log('findMatchWinner');
+
     let winner = null;
-    const p1Alive = this.player[0].alive;
-    const p2Alive = this.player[1].alive;
+    const p1isAlive= this.players[0].isAlive;
+    //console.log('isp1 alive: ' + p1isAlive);
+    const p2isAlive= this.players[1].isAlive;
+    //console.log('isp2 alive: ' + p2isAlive);
 
-    switch (true) {
-      case p1Alive && p2Alive:
+    if(p1isAlive && p2isAlive) {
+      //restarted match;
+      this.players[0].action = '';
+      this.players[1].action = '';
+      this.startCountdown();
+    } else if (!p1isAlive&& !p2isAlive) {
+      winner = -1;
+      $('.debugger').append(`<h3>winner: tie!</h3>`);
+    } else if (p1isAlive&& !p2isAlive) {
       winner = 0;
-        break;
-      case p1Alive && !p2Alive:
-        winner = 1;
-        break;
-      case !p1Alive && p2Alive:
-        winner = 2;
-        break;
-      default: winner = 0;
+      $('.debugger').append(`<h3>winner: Player 1</h3>`);
+    } else if (!p1isAlive&& p2isAlive) {
+      winner = 1;
+      //console.log('winner: Player 2');
+      $('.debugger').append(`<h3>winner: Player 2</h3>`)
+    } else {
+      winner = -1;
     }
-
-    this.pointsTo(winner);
+    //console.log('winner: ' + winner);
+    this.increasePoints(winner);
   },
-  pointsTo(winner) {
+  increasePoints(winner) {
+    switch (winner) {
+      case -1:
+        this.round++;
+        break;
+      case 0:
+        this.points[0]++;
+        this.round++;
+        break;
+      case 1:
+        this.points[1]++;
+        this.round++;
+        break;
+      default: this.round++;
+    }
 
   },
   newRound(){
@@ -135,15 +186,17 @@ const game = {
     //
   }
 }
-
-game.startGame();
+game.newGame();
 
 
   // Event listeners that listen for keypress
-  $(document).keydown((e) => {
-      console.log(e.which);
-      game.translateKeypress(e.which);
-    });
+$(document).keydown((e) => {
+    if(e.which==32) {
+        clearInterval(game.countdown)
+    } else {
+      game.keypressToAction(e.which);
+    }
+});
 
 
 
