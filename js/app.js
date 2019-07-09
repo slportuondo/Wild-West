@@ -6,7 +6,7 @@
 const game = {
   players: [],   // Array of player objects
   points: [0,0],
-  round: null,
+  round: 0,
   timer: 0,   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
   canChoose: false,
   countdown: null,
@@ -177,13 +177,33 @@ const game = {
         this.points[1]++;
         this.round++;
         break;
-      default: this.round++;
     }
-
+    // this.newRound();
   },
   newRound(){
-    //reset obj values
-    //
+    if (this.round > 7) {
+      this.gameOver();
+    } else {
+      this.resetObject(0);
+      this.resetObject(1);
+    }
+  },
+  gameOver(){
+    let winner = null;
+    if (this.points[0] > this.points[1]) {
+      winner = 0;
+    } else {
+      winner = 1;
+    }
+    console.log(`GAME OVER – PLAYER ${this.players[winner]}`);
+  },
+  resetObject(playerNum){
+    const player = this.players[playerNum];
+    player.isAlive = true;
+    player.isVulnerable = true;
+    player.shield = 3;
+    player.ammo = 1;
+    player.action = '';
   }
 }
 game.newGame();
@@ -197,16 +217,3 @@ $(document).keydown((e) => {
       game.keypressToAction(e.which);
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-    //
-    //

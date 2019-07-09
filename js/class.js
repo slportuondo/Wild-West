@@ -4,7 +4,7 @@ class Player {
     this.isAlive = true;
     this.isVulnerable = true;
     this.shield = 3; //Indicates number of shields, whether or not shield was used last turn
-    this.ammo = 100;
+    this.ammo = 1;
     this.action = '';
   }
   shoot(enemy){
