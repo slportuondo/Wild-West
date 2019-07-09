@@ -1,13 +1,18 @@
 console.log('hello world');
   // Function to clear keypresses at the end of a match
+  // Function to
   // Function to increase points
   // Funtion to increase round number
 const game = {
   players: [],   // Array of player objects
-  timer: false,   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
+  timer: '',   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
   canChoose: false,
   startGame() {
-
+    for (let i = 0; i < 2; i++) {
+      let addPlayer = new Player(i);
+      this.players.push(addPlayer);
+    }
+    this.startCountdown();
   },
   startCountdown() {
     this.timer = 3;
@@ -31,47 +36,82 @@ const game = {
       switch (pressedKey) {
         case 65: //Player 1 hits 'a' key (reload)
         game.player[0].action = 'reload';
+        this.verifyAction(0);
         break;
         case 83: // Player 1 hits 'S' key (shield)
         game.player[0].action = 'shield';
+        this.verifyAction(0);
         break;
         case 68: // Player 1 hits 'D' key (shoot)
         game.player[0].action = 'shoot';
+        this.verifyAction(0);
         break;
         case 37: // Player 2 hits left arrow key (shoot)
         game.player[1].action = 'shoot';
+        this.verifyAction(1);
         break;
         case 40: // Player 2 hits down arrow key (shoot)
         game.player[1].action = 'shield';
+        this.verifyAction(1);
         break;
         case 39: //Player 2 hits right arrow key (reload)
         game.player[1].action = 'reload';
+        this.verifyAction(1);
         break;
         default: return;
       }
     }
   },
-  playerAction(number) {
-    const key = game.player[number].action;
+  verifyAction(playerNum) {
+    const player = game.players[playerNum];
+    console.log(player);
+    let enemyNum = null;
+    if (playerNum === 0) {
+      enemyNum = 1;
+    } else {
+      enemyNum = 0;
+    }
+    console.log(playerNum);
+    console.log(player.action);
+    if (player.action === 'shoot') {
+      if (player.ammo < 1) {
+        player.action = 'shield';
+        // Add error sound later
+      }
+    } else if (action === 'reload') {
+      if (player.ammo > 1) {
+        player.action = 'shield';
+        // Add error sound later
+      } else {
+        return;
+      }
+    }
+  },
+  doAction(playerNum) {
+    const key = game.player[playerNum].action;
     switch (key) {
       case 'shoot':
-        game.player[number].shoot();
+        game.player[playerNum].shoot();
       break;
       case 'reload':
-        game.player[number].reload();
+        game.player[playerNum].reload();
       break;
       case 'shield':
-        game.player[number].shield();
+        game.player[playerNum].shield();
       break;
-      default: game.player[number].shield();  
+      default: game.player[playerNum].shield();
     }
-    game.player[number].reload();
+  },
+  newRound(){
+    //reset obj values
+    //
   }
 }
-game.startCountdown();
+game.startGame();
+
 
   // Event listeners that listen for keypress
-    $(document).keydown((e) => {
+  $(document).keydown((e) => {
       console.log(e.which);
       game.playerKeypress(e.which);
     });
