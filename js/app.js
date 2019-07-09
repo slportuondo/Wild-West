@@ -5,6 +5,8 @@ console.log('hello world');
   // Funtion to increase round number
 const game = {
   players: [],   // Array of player objects
+  score: [0,0],
+  round: 0,
   timer: '',   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
   canChoose: false,
   startGame() {
@@ -30,8 +32,11 @@ const game = {
         this.canChoose = false;
       }
     }, 1000);
+    // Call selected / verified action of both players after timer ends
+    this.doAction(0);
+    this.doAction(1)
   },
-  playerKeypress(pressedKey){
+  translateKeypress(pressedKey){
     if (game.canChoose === true) {
       switch (pressedKey) {
         case 65: //Player 1 hits 'a' key (reload)
@@ -102,18 +107,42 @@ const game = {
       default: game.player[playerNum].shield();
     }
   },
+  findMatchWinner(){
+    let winner = null;
+    const p1Alive = this.player[0].alive;
+    const p2Alive = this.player[1].alive;
+
+    switch (true) {
+      case p1Alive && p2Alive:
+      winner = 0;
+        break;
+      case p1Alive && !p2Alive:
+        winner = 1;
+        break;
+      case !p1Alive && p2Alive:
+        winner = 2;
+        break;
+      default: winner = 0;
+    }
+
+    this.pointsTo(winner);
+  },
+  pointsTo(winner) {
+
+  },
   newRound(){
     //reset obj values
     //
   }
 }
+
 game.startGame();
 
 
   // Event listeners that listen for keypress
   $(document).keydown((e) => {
       console.log(e.which);
-      game.playerKeypress(e.which);
+      game.translateKeypress(e.which);
     });
 
 
