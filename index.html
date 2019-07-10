@@ -4,63 +4,66 @@
 	<title>Red Dead Reduction</title>
 	<link rel="stylesheet" type="text/css" href="css/reset.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/css?family=Kumar+One&display=swap" rel="stylesheet">
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> -->
 </head>
 <body>
-	<container id="game">
-		<div class="gameInfo">
-			<h1 class="gameName">Red Dead Reduction</h1>
-			<h2 class="round"></h2>
-		</div>
-		<div class="countdown">
-			<h1 id="timer"></h1>
-		</div>
-		<div class='debugger'>
-
-		</div>
-		<div class="player1">
-			<div class="statsP1">
-				<!-- <div class="shieldP1">
+	<container id="gameContainer">
+		<div id="gameInfo">
+			<div id="points">
+				<span class="points" id="pointsP1">Points: <h2 id="pointDisplayP1">0</h2></span>
+				<span class = id="pointsP2">Points: <h2 id="pointDisplayP2">0</h2></span>
+			</div>
+			<div class="stats" id="statsP1">
+				<div id="shieldP1">
 					<h2>Shield :</h2>
 					<div class="shieldImg">
-						<img id="shield01P1" src="#" alt="Player 1 shield 1">
-						<img id="shield02P1" src="#" alt="Player 1 shield 2">
-						<img id="shield03P1" src="#" alt="Player 1 shield 3">
+						<img class="shield" id="shield01P1" src="#" alt="Player 1 shield 1">
+						<img class="shield" id="shield02P1" src="#" alt="Player 1 shield 2">
+						<img class="shield" id="shield03P1" src="#" alt="Player 1 shield 3">
 					</div>
 				</div>
-				<div class="ammoP1">
+				<div id="ammoP1">
 					<div class="ammoImg">
 						<img id="ammo01P1" src="#" alt="Player 1 ammo 1">
 						<img id="ammo02P1" src="#" alt="Player 1 ammo 2">
 					</div>
-				</div> -->
+				</div>
 			</div>
-			<div class="character1"></div>
-			<span class="pointsP1">Points: <h2 id="pointDisplayP1">0</h2></span>
-		</div>
-		<div class="player2">
-			<div class="statsP2">
-				<!-- <div class="shieldP2">
+			<div id="titleText">
+				<h1 id="gameName">Red Dead Reduction</h1>
+			</div>
+			<h2 id="round"></h2>
+			<div class="stats" id="statsP2">
+				<div id="shieldP2">
 					<h2>Shield :</h2>
 					<div class="shieldImg">
-						<img id="shield01P2" src="#" alt="Player 2 shield 1">
-						<img id="shield02P2" src="#" alt="Player 2 shield 2">
-						<img id="shield03P2" src="#" alt="Player 2 shield 3">
+						<img class = "shield" id="shield01P2" src="#" alt="Player 2 shield 1">
+						<img class = "shield" id="shield02P2" src="#" alt="Player 2 shield 2">
+						<img class = "shield" id="shield03P2" src="#" alt="Player 2 shield 3">
 					</div>
 				</div>
-				<div class="ammoP2">
-					<div class="ammoImg">
-						<img id="ammo01P2" src="#" alt="Player 2 ammo 1">
-						<img id="ammo02P2" src="#" alt="Player 2 ammo 2">
-					</div>
-				</div> -->
+				<div id="ammoImg">
+					<img class="ammoImg" id="ammo01P2" src="#" alt="Player 2 ammo 1">
+					<img class="ammoImg" id="ammo02P2" src="#" alt="Player 2 ammo 2">
+				</div>
 			</div>
-			<div class="character2"></div>
-			<span class="pointsP1">Points: <h2 id="pointDisplayP1">0</h2></span>
+			<!-- <div id="countdown">
+				<h1 id="timer"></h1>
+			</div>
+			<div class='debugger'></div> -->
+		</div>
+		<div id="players">
+			<div class="player" id="player1">
+				<div class="character" id="character1"></div>
+			</div>
+			<div class="player" id="player2">
+				<div class="character" id="character2"></div>
+			</div>
 	</container>
 
-	<script type="text/javascript" src="js/class.js"></script>
-	<script type="text/javascript" src="js/app.js"></script>
+	<!-- <script type="text/javascript" src="js/class.js"></script>
+	<script type="text/javascript" src="js/app.js"></script> -->
 </body>
 <footer></footer>
 </html>

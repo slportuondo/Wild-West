@@ -1,4 +1,66 @@
+/* color-scheme {
+	background: #241E4E;
+	background: #563A75;
+	background: #F2A500;
+	background: #DC602E;
+	background: #961F29;
+} */
+html, body {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	width: 100%;
+}
+
 body {
-	background: red;
 	color: white;
+	font-family: 'Kumar One', cursive;
+}
+#gameName {
+	flex: 0;
+}
+#gameContainer {
+	display: flex;
+	background: red;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+}
+
+#players {
+	display: flex;
+	flex-direction: row;
+	flex: 15;
+	width: 100%;
+	height: 100%;
+}
+
+.player {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	height: 100%;
+	width: 100%;
+}
+#player1 {
+	background: #DC602E;
+}
+#player2 {
+	background: #961F29;
+}
+
+.character {
+	width: 90px;
+	height: 165px;
+}
+#character1 {
+	background: #241E4E;
+	width: 90px;
+}
+#character2 {
+	background: #F2A500;
 }

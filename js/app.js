@@ -77,7 +77,8 @@ const game = {
     const player = this.players[playerNum];
     if (player.action == 'shoot' && player.ammo == 0) {
         player.action = 'shield';
-        $('.debugger').append(`<h3>Player ${player.name+ 1} tried to shoot with no ammo defaulted to shield, shield at ${player.shield}</h3>`);
+        $('.debugger').append(`<h3>Player ${player.name + 1} tried to shoot with no ammo defaulted to shield, shield at ${player.shield}</h3>`);
+
         // Error sound needed
     } else if (player.action == 'reload' && player.ammo == 2) {
         player.action = 'shield';
@@ -86,7 +87,7 @@ const game = {
     } else if (player.action == '') {
       player.action = 'shield'; $('.debugger').append(`<h3>Player ${player.name + 1} defaulted to shield, shield at ${player.shield}</h3>`);
     } else {
-      $('.debugger').append(`<h3>Player ${player.name + 1} chose to ${player.action}, shield at ${player.shield}</h3>`);
+      $('.debugger').append(`<h3>Player ${player.name + 1} chose to ${player.action}, shield at ${player.shield}</h3>`).hide();
     }
   },
   editPlayersVulnerability(){
