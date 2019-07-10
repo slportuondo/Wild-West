@@ -16,51 +16,137 @@ body {
 	color: white;
 	font-family: 'Kumar One', cursive;
 }
-#gameName {
-	flex: 0;
-}
-#gameContainer {
-	display: flex;
-	background: red;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	width: 100%;
-}
+	#gameContainer {
+		display: flex;
+		background: red;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+	}
+		#gameInfo {
+			z-index: 10;
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+		}
 
-#players {
-	display: flex;
-	flex-direction: row;
-	flex: 15;
-	width: 100%;
-	height: 100%;
-}
+			#gameStats {
+				display: flex;
+				flex-direction: column;
+				flex: 8;
+				align-items: center;
+				justify-content: center;
+				height: 100%;
+				width: 100%;
+			}
+				#emptyDiv {
+					flex: 3;
+				}
+				#centralDisplay {
+					display: flex;
+					flex: 5;
+					flex-direction: row;
+					width: 100%;
+					height: 100%;
+				}
+					.points {
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						font-size: 35px;
+					}
+					#titleText {
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						align-items: center;
+						text-align: center;
+						height: 100%;
+						font-size: 50px;
+					}
+				#round {
+					flex: 5;
+					display: flex;
+					justify-content: center;
+					font-size: 35px;
+					width: 100%;
+					height: 100%;
+				}
 
-.player {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	flex: 1;
-	height: 100%;
-	width: 100%;
-}
-#player1 {
-	background: #DC602E;
-}
-#player2 {
-	background: #961F29;
-}
+			#inventoryStats {
+					display: flex;
+					flex: 1;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					font-size: 10px;
+					width: 100%;
+				}
+				#inventoryStatsP1 {
+					display: inline-flex;
+					flex: 1;
+				}
+				#inventoryStatsP2 {
+					display: inline-flex;
+					flex: 1;
+				}
+					.shield {
+					flex: 3;
+				}
+					.ammo {
+					flex: 2;
+				}
+				
+			#countdown {
+				display: flex;
+				justify-content: center;
+				flex: 1;
+				width: 100%;
+			}
 
-.character {
-	width: 90px;
-	height: 165px;
-}
-#character1 {
-	background: #241E4E;
-	width: 90px;
-}
-#character2 {
-	background: #F2A500;
-}
+		#players {
+			display: flex;
+			flex-direction: row;
+			flex: 15;
+			width: 100%;
+			height: 100%;
+		}
+			.player {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				flex: 1;
+				height: 100%;
+				width: 100%;
+			}
+			#player1 {
+				background: #DC602E;
+			}
+			#player2 {
+				background: #961F29;
+			}
+				.character {
+					width: 90px;
+					height: 175px;
+					margin-top: 40%;
+				}
+				#character1 {
+					background: #241E4E;
+					width: 90px;
+					margin-right: 30%;
+				}
+				#character2 {
+					background: #F2A500;
+					margin-left: 30%;
+				}
