@@ -1,6 +1,7 @@
 /* color-scheme {
 	background: #241E4E;
 	background: #563A75;
+	background: #2E99EA;
 	background: #F2A500;
 	background: #DC602E;
 	background: #961F29;
@@ -35,20 +36,35 @@ body {
 			width: 100%;
 			height: 100%;
 		}
-
-			#gameStats {
+			#titleText {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				flex: 1;
+				width: 100%;
+				font-size: 25px;
+				word-spacing: 1em;
+			}
+				#gameName01 {
+					flex: 1;
+					color: #961F29;
+				}
+				#gameName02 {
+					flex: 1;
+					display: flex;
+					justify-content: flex-end;
+					color: #DC602E;
+				}
+			#centralDisplay {
 				display: flex;
 				flex-direction: column;
-				flex: 8;
+				flex: 10;
 				align-items: center;
 				justify-content: center;
 				height: 100%;
 				width: 100%;
 			}
-				#emptyDiv {
-					flex: 3;
-				}
-				#centralDisplay {
+				#gameStats {
 					display: flex;
 					flex: 5;
 					flex-direction: row;
@@ -63,7 +79,7 @@ body {
 						justify-content: center;
 						font-size: 35px;
 					}
-					#titleText {
+					#round {
 						flex: 1;
 						display: flex;
 						flex-direction: column;
@@ -71,48 +87,37 @@ body {
 						align-items: center;
 						text-align: center;
 						height: 100%;
-						font-size: 50px;
+						font-size: 100px;
 					}
-				#round {
-					flex: 5;
-					display: flex;
-					justify-content: center;
-					font-size: 35px;
-					width: 100%;
-					height: 100%;
-				}
 
 			#inventoryStats {
 					display: flex;
 					flex: 1;
 					flex-direction: row;
 					align-items: center;
-					justify-content: center;
-					text-align: center;
 					font-size: 10px;
 					width: 100%;
 				}
-				#inventoryStatsP1 {
-					display: inline-flex;
+				.emptyDivSides {
 					flex: 1;
 				}
-				#inventoryStatsP2 {
-					display: inline-flex;
-					flex: 1;
+				.emptyDivMid {
+					flex: 6;
 				}
-					.shield {
-					flex: 3;
-				}
-					.ammo {
+				.invStats {
 					flex: 2;
+					display: flex;
+					text-align: center;
 				}
-				
-			#countdown {
-				display: flex;
-				justify-content: center;
-				flex: 1;
-				width: 100%;
-			}
+				#inventoryStatsP1 {
+					flex-direction: row-reverse;
+				}
+						.shield {
+						flex: 3;
+					}
+						.ammo {
+						flex: 2;
+					}
 
 		#players {
 			display: flex;
@@ -149,4 +154,24 @@ body {
 				#character2 {
 					background: #F2A500;
 					margin-left: 30%;
+				}
+				.shieldIcon {
+					width: 40px;
+					height: 40px;
+				}
+				.ammoIcon {
+					width: 30px;
+					height: 30px;
+				}
+
+		#countdown {
+					z-index: 20;
+					position: absolute;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					font-size: 300px;
+					width: 100%;
+					height: 100%;
 				}

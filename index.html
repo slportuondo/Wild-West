@@ -10,60 +10,49 @@
 <body>
 	<container id="gameContainer">
 		<div id="gameInfo">
-			<!--Game stats: Title in middle, points on either side, round number at the bottom-->
-			<div id="gameStats">
-				<div id="emptyDiv"></div>
-				<div id="centralDisplay">
+			<div id="titleText">
+				<h1 id="gameName01">Red Dead Reduction</h1>
+				<span id="gameName02"><h1>Red Dead Reduction</h1></span>
+			</div>
+			<div id="centralDisplay">
+				<div id="gameStats">
 					<div class="points" id="pointsP1">
-						<h2 id="pointDisplayP1">Points: P1</h2>
+						<h2 id="pointDisplayP1">P1</h2>
 					</div>
-					<div id="titleText">
-						<h1 id="gameName">Red Dead Reduction</h1>
+					<div id="round">
+						<h2>Round 1</h2>
 					</div>
 					<div class="points" id="pointsP2">
-						<h2 id="pointDisplayP2">Points: P1</h2>
+						<h2 id="pointDisplayP2">P2</h2>
 					</div>
 				</div>
-				<div id="round">
-						<h2>Round 1</h2>
-				</div>
 			</div>
-			<!--InventoryStats: P1 and P2 inventory, which includes 3 health categories and 2 ammo categories-->
 			<div id="inventoryStats">
-				<div id="inventoryStatsP1">
-					<div class="shield" id="shieldP1">
-						<div class="shieldImgs">
-							<img class="shield" id="shield01P1" src="#" alt="Player 1 shield 1">
-							<img class="shield" id="shield02P1" src="#" alt="Player 1 shield 2">
-							<img class="shield" id="shield03P1" src="#" alt="Player 1 shield 3">
+				<div class="emptyDivSides"></div>
+				<div class="invStats" id="inventoryStatsP1">
+						<div class="shield" id="shieldP1">
+							<img class="shieldIcon" id="shield01P1" src="images/shieldOnIcon.png" alt="Player 1 shield 1">
+							<img class="shieldIcon" id="shield02P1" src="images/shieldOnIcon.png" alt="Player 1 shield 2">
+							<img class="shieldIcon" id="shield03P1" src="images/shieldOnIcon.png" alt="Player 1 shield 3">
+						</div>
+						<div class="ammo" id="ammoP1">
+							<img class="ammoIcon" id="ammo01P1" src="images/ammoOnIcon.png" alt="Player 1 ammo 1">
+							<img class="ammoIcon" id="ammo02P1" src="images/ammoOnIcon.png" alt="Player 1 ammo 2">
 						</div>
 					</div>
-					<div class="ammo" id="ammoP1">
-						<div class="ammoImg">
-							<img id="ammo01P1" src="#" alt="Player 1 ammo 1">
-							<img id="ammo02P1" src="#" alt="Player 1 ammo 2">
-						</div>
-					</div>
-				</div>
-				<div id="inventoryStatsP2">
+				<div class="emptyDivMid"></div>
+				<div class="invStats" id="inventoryStatsP2">
 					<div class="shield" id="shieldP2">
-						<h2>Shield :</h2>
-						<div class="shieldImg">
-							<img class = "shield" id="shield01P2" src="#" alt="Player 2 shield 1">
-							<img class = "shield" id="shield02P2" src="#" alt="Player 2 shield 2">
-							<img class = "shield" id="shield03P2" src="#" alt="Player 2 shield 3">
-						</div>
+						<img class = "shieldIcon" id="shield01P2" src="images/shieldOnIcon.png" alt="Player 2 shield 1">
+						<img class = "shieldIcon" id="shield02P2" src="images/shieldOnIcon.png" alt="Player 2 shield 2">
+						<img class = "shieldIcon" id="shield03P2" src="images/shieldOnIcon.png" alt="Player 2 shield 3">
 					</div>
-					<div class="ammo" id="ammoImg">
-						<img class="ammoImg" id="ammo01P2" src="#" alt="Player 2 ammo 1">
-						<img class="ammoImg" id="ammo02P2" src="#" alt="Player 2 ammo 2">
+					<div class="ammo" id="ammoP2">
+						<img class="ammoIcon" id="ammo01P2" src="images/ammoOnIcon.png" alt="Player 2 ammo 1">
+						<img class="ammoIcon" id="ammo02P2" src="images/ammoOnIcon.png" alt="Player 2 ammo 2">
 					</div>
 				</div>
-			</div>
-
-			<div id="countdown">
-				<h1 id="timer">here</h1>
-				<div class='debugger'></div>
+				<div class="emptyDivSides"></div>
 			</div>
 		</div>
 		<div id="players">
@@ -72,6 +61,10 @@
 			</div>
 			<div class="player" id="player2">
 				<div class="character" id="character2"></div>
+			</div>
+		<div id="countdown">
+				<h1 id="timer">3</h1>
+				<div class='debugger'></div>
 			</div>
 	</container>
 
