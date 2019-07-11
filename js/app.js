@@ -6,13 +6,16 @@
 const game = {
   players: [], // Array of player objects
   animations: {
-    none: ['cowboy1.png', 'cowboy2.png'],
-    shoot: ['cowboy1Shoot.gif', 'cowboy2Shoot.gif'],
-    reload: ['cowboy1Reload.gif', 'cowboy2Reload.gif' ],
-    shield: ['cowboy1Shield.gif', 'cowboy2Shield.gif']
+    sprite: ['1Sprite.png', '2Sprite.png'],
+    shoot: ['1Shoot.gif', '2Shoot.gif'],
+    reload: ['1Reload.gif', '2Reload.gif' ],
+    shield: ['1Shield.gif', '2Shield.gif'],
+    death: ['1Death.gif', '2Death.gif'],
+    respawn:['1Respawn.gif', '2Respawn.gif']
   },
   points: [0,0],
-  round: 0,
+  round: 1,
+  suddenDeath: false,
   timer: 0,
   canChoose: false,
   countdown: null,
@@ -24,8 +27,10 @@ const game = {
     this.startCountdown();
   },
   startCountdown() {
-    this.timer = 3;
+    this.animate(0, 'sprite');
+    this.animate(1, 'sprite');
     // Function to create timer that stops after 3 seconds
+    this.timer = 3;
     this.countdown = setInterval(() => {
       $('#timer').text(this.timer);
       //console.log(this.timer);
@@ -38,13 +43,10 @@ const game = {
       } else if (this.timer === ''){
         clearInterval(this.countdown);
         this.canChoose = false;
-        this.verifyAction(0);
-        this.verifyAction(1);
+        this.verifyAction(0); this.verifyAction(1);
         this.editPlayersVulnerability();
         this.doAction(0);
         this.doAction(1);
-        this.animate(0);
-        this.animate(1);
         this.findMatchWinner();
       }
     }, 500);
@@ -62,12 +64,10 @@ const game = {
           break;
         case 68: // Player 1 hits 'D' key (shoot)
           this.players[0].action = 'shoot';
-          //console.log('1 Shot');
           //console.log(this.players[0].action);
           break;
         case 37: // Player 2 hits left arrow key (shoot)
           this.players[1].action = 'shoot';
-          //console.log('2 Shot');
           //console.log(this.players[1].action);
           break;
         case 40: // Player 2 hits down arrow key (shoot)
@@ -84,21 +84,22 @@ const game = {
     const player = this.players[playerNum];
     if (player.action == 'shoot' && player.ammo == 0) {
         player.action = 'shield';
-        $('.debugger').append(`<h3>Player ${player.name + 1} tried to shoot with no ammo defaulted to shield, shield at ${player.shield}</h3>`);
+        // $('.debugger').append(`<h3>Player ${player.name + 1} tried to shoot with no ammo defaulted to shield, shield at ${player.shield}</h3>`);
 
         // Error sound needed
     } else if (player.action == 'reload' && player.ammo == 2) {
         player.action = 'shield';
-        $('.debugger').append(`<h3>Player ${player.name+ 1} tried to reload with full ammo, defaulted to shield, shield at ${player.shield}</h3>`);
+        // $('.debugger').append(`<h3>Player ${player.name+ 1} tried to reload with full ammo, defaulted to shield, shield at ${player.shield}</h3>`);
         // Error sound needed
     } else if (player.action == '') {
-      player.action = 'shield'; $('.debugger').append(`<h3>Player ${player.name + 1} defaulted to shield, shield at ${player.shield}</h3>`);
-    } else {
-      $('.debugger').append(`<h3>Player ${player.name + 1} chose to ${player.action}, shield at ${player.shield}</h3>`).hide();
-    }
+      player.action = 'shield'; $
+      // ('.debugger').append(`<h3>Player ${player.name + 1} defaulted to shield, shield at ${player.shield}</h3>`);
+     }
+     //else {
+    //   $('.debugger').append(`<h3>Player ${player.name + 1} chose to ${player.action}, shield at ${player.shield}</h3>`).hide();
+    // }
   },
   editPlayersVulnerability(){
-    //console.log('editPlayersVulnerability------------');
     //Edits players' vulnerability before their actions are executed, so that both are able to shoot each other at the same time
     for (let i = 0; i < 2; i++) {
       const player = this.players[i];
@@ -116,20 +117,27 @@ const game = {
 
     }
   },
-  animate(playerNum) {
-    const animation = this.players[playerNum].action
-    console.log(this.animations[animation][playerNum]);
-    // let animInterval = setInterval(() => {
-    $(`#${playerNum}`).attr('src', 'images/' + this.animations[animation][playerNum]);
-    //   clearInterval(animInterval);
-    // }, 1200);
+  animate(playerNum, action) {
+    playerNum = parseInt(playerNum);
+
+    if (action === 'respawn' && this.players[playerNum].isAlive === true) {
+      return;
+    } else {
+      console.log(playerNum);
+      $(`#${playerNum}`).attr('src', `images/cowboy${this.animations[action][playerNum]}`);
+    }
+
+    if (this.players[playerNum].isAlive === false) {
+      setTimeout(() => {
+        $(`#${playerNum}`).attr('src', `images/cowboy ${this.animations['death'][playerNum]}`);
+      }, 1000);
+    }
   },
   doAction(playerNum) {
     //console.log('doAction-----------------');
     const player = this.players[playerNum];
     let enemy = null;
 
-    console.log('DO' + player.action);
     if (playerNum == 0) {
       enemy = this.players[1];
     } else {
@@ -137,93 +145,105 @@ const game = {
     }
     switch (player.action) {
       case 'shoot':
-        this.players[playerNum].shoot(enemy);
+        player.shoot(enemy);
         break;
       case 'reload':
-        this.players[playerNum].reload();
+        player.reload();
         break;
       case 'shield':
-        this.players[playerNum].useShield();
+        player.useShield();
         break;
       default:
-        this.players[playerNum].useShield();
+        player.useShield();
         break;
     }
+    this.animate(playerNum, player.action);
   },
   findMatchWinner(){
     //console.log('findMatchWinner');
-
-    let winner = null;
     const p1isAlive= this.players[0].isAlive;
     //console.log('isp1 alive: ' + p1isAlive);
     const p2isAlive= this.players[1].isAlive;
     //console.log('isp2 alive: ' + p2isAlive);
 
-    if(p1isAlive && p2isAlive) {
-      //restarted match;
-      this.players[0].action = '';
-      this.players[1].action = '';
-      this.startCountdown();
-    } else if (!p1isAlive&& !p2isAlive) {
-      winner = -1;
-      $('.debugger').append(`<h3>winner: tie!</h3>`);
+
+    if (!p1isAlive&& !p2isAlive) {
+      this.increasePoints(-1);
     } else if (p1isAlive&& !p2isAlive) {
-      winner = 0;
-      $('.debugger').append(`<h3>winner: Player 1</h3>`);
+      this.increasePoints(0);
     } else if (!p1isAlive&& p2isAlive) {
-      winner = 1;
-      //console.log('winner: Player 2');
-      $('.debugger').append(`<h3>winner: Player 2</h3>`)
-    } else {
-      winner = -1;
+      this.increasePoints(1);
+    } else if(p1isAlive && p2isAlive) {
+      this.resetObject(0);
+      this.resetObject(1);
+      this.startCountdown();
     }
-    //console.log('winner: ' + winner);
-    this.increasePoints(winner);
   },
   increasePoints(winner) {
+    let winMessage = ''
     switch (winner) {
       case -1:
         this.round++;
+        winMessage = 'DRAW'
         break;
       case 0:
         this.points[0]++;
         this.round++;
+        winMessage = 'P1 WINS MATCH';
         break;
       case 1:
+        winMessage = 'P2 WINS MATCH';
         this.points[1]++;
         this.round++;
         break;
     }
-    // this.newRound();
+    this.updateDisplay(winMessage);
+  },
+  updateDisplay(winMessage){
+    $('announcer').text(winMessage);
+    this.resetObject(0);
+    this.resetObject(1);
+    setTimeout(() => {
+      $('#pointDisplayP1').text(this.points[0]);
+      $('#pointDisplayP2').text(this.points[1]);
+      $('#announcer').text('Round: ' + this.round);
+    }, 2000);
+    setTimeout(() => {
+      $('#announcer').text('');
+      this.newRound();
+    }, 4000);
   },
   newRound(){
     if (this.round > 7) {
       this.gameOver();
     } else {
-      this.resetObject(0);
-      this.resetObject(1);
+      this.startCountdown();
     }
+  },
+  resetObject(playerNum){
+    const player = this.players[playerNum];
+    if (player.isAlive === false){
+      setTimeout(() => {
+        this.animate(playerNum, 'respawn');
+      }, 1000);
+    }
+      player.isAlive = true;
+      player.isVulnerable = true;
+      player.shield = 3;
+      player.ammo = 1;
+      player.action = '';
   },
   gameOver(){
     let winner = null;
     if (this.points[0] > this.points[1]) {
-      winner = 0;
+      winner = 'P1';
     } else {
-      winner = 1;
+      winner = 'P2';
     }
-    console.log(`GAME OVER – PLAYER ${this.players[winner]}`);
-  },
-  resetObject(playerNum){
-    const player = this.players[playerNum];
-    player.isAlive = true;
-    player.isVulnerable = true;
-    player.shield = 3;
-    player.ammo = 1;
-    player.action = '';
+    console.log(`GAME OVER – ${winner} WINS`);
   }
 }
 game.newGame();
-
 
 // Event listeners that listen for keypress
 $(document).keydown((e) => {
