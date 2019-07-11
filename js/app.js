@@ -9,7 +9,7 @@ const game = {
     none: ['cowboy1.png', 'cowboy2.png'],
     shoot: ['cowboy1Shoot.gif', 'cowboy2Shoot.gif'],
     reload: ['cowboy1Reload.gif', 'cowboy2Reload.gif' ],
-    shield: ['cowboy1Shield.gif', 'cowboyS2hield.gif']
+    shield: ['cowboy1Shield.gif', 'cowboy2Shield.gif']
   },
   points: [0,0],
   round: 0,

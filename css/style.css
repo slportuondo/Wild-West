@@ -149,12 +149,7 @@ body {
 					justify-content: center;
 					margin-top: 40%;
 				}
-				#character1 {
-					margin-right: 30%;
-				}
-				#character2 {
-					margin-left: 30%;
-				}
+
 				.shieldIcon {
 					width: 30px;
 					height: 30px;
