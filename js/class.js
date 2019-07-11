@@ -8,7 +8,6 @@ class Player {
     this.action = '';
   }
   shoot(enemy){
-    this.animate('shoot')
     this.ammo--;
     if (enemy.isVulnerable == true) {
       enemy.isAlive = false;
@@ -18,28 +17,10 @@ class Player {
   reload(){
     this.ammo ++;
     this.shield = 3;
-    this.animate('reload');
   }
   useShield(){
     if (this.shield > 0) {
       this.shield --;
-      this.animate('shield');
-    }
-  }
-  animate(action){
-    const character = ('character' + this.name + 'Display');
-    switch (action) {
-      case 'shoot':
-        $(character);
-        break;
-      case 'reload':
-
-        break;
-      case 'shield':
-
-        break;
-      default:
-
     }
   }
 }

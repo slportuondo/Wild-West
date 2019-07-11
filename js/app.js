@@ -4,10 +4,16 @@
   // Function to increase points
   // Funtion to increase round number
 const game = {
-  players: [],   // Array of player objects
+  players: [], // Array of player objects
+  animations: {
+    none: ['cowboy1.png', 'cowboy2.png'],
+    shoot: ['cowboy1Shoot.gif', 'cowboy2Shoot.gif'],
+    reload: ['cowboy1Reload.gif', 'cowboy2Reload.gif' ],
+    shield: ['cowboy1Shield.gif', 'cowboyS2hield.gif']
+  },
   points: [0,0],
   round: 0,
-  timer: 0,   // Timer in seconds: 3, 2, 1, 0  --> (0 = go)
+  timer: 0,
   canChoose: false,
   countdown: null,
   newGame() {
@@ -28,8 +34,8 @@ const game = {
         this.timer--;
       }
       if (this.timer === 0) {
-        this.timer = 'GO';
-      } else if (this.timer === 'GO'){
+        this.timer = '';
+      } else if (this.timer === ''){
         clearInterval(this.countdown);
         this.canChoose = false;
         this.verifyAction(0);
@@ -37,14 +43,15 @@ const game = {
         this.editPlayersVulnerability();
         this.doAction(0);
         this.doAction(1);
+        this.animate(0);
+        this.animate(1);
         this.findMatchWinner();
-        this.characterAnimation();
       }
     }, 500);
     // Call selected / verified action of both players after timer ends
   },
   keypressToAction(pressedKey){
-    //console.log('keypressToAction-------------');
+    // console.log('keypressToAction-------------');
     if (game.canChoose === true) {
       switch (pressedKey) {
         case 65: //Player 1 hits 'a' key (reload)
@@ -73,7 +80,7 @@ const game = {
     }
   },
   verifyAction(playerNum) {
-    // //console.log('verifyAction------------');
+    //console.log('verifyAction------------');
     const player = this.players[playerNum];
     if (player.action == 'shoot' && player.ammo == 0) {
         player.action = 'shield';
@@ -109,17 +116,25 @@ const game = {
 
     }
   },
+  animate(playerNum) {
+    const animation = this.players[playerNum].action
+    console.log(this.animations[animation][playerNum]);
+    // let animInterval = setInterval(() => {
+    $(`#${playerNum}`).attr('src', 'images/' + this.animations[animation][playerNum]);
+    //   clearInterval(animInterval);
+    // }, 1200);
+  },
   doAction(playerNum) {
     //console.log('doAction-----------------');
     const player = this.players[playerNum];
     let enemy = null;
-    //console.log('DO' + player.action);
+
+    console.log('DO' + player.action);
     if (playerNum == 0) {
       enemy = this.players[1];
     } else {
       enemy = this.players[0];
     }
-
     switch (player.action) {
       case 'shoot':
         this.players[playerNum].shoot(enemy);
@@ -210,7 +225,7 @@ const game = {
 game.newGame();
 
 
-  // Event listeners that listen for keypress
+// Event listeners that listen for keypress
 $(document).keydown((e) => {
     if(e.which==32) {
         clearInterval(game.countdown)
