@@ -27,8 +27,6 @@ const game = {
     this.startCountdown();
   },
   startCountdown() {
-    this.animate(0, 'sprite');
-    this.animate(1, 'sprite');
     // Function to create timer that stops after 3 seconds
     this.timer = 3;
     this.countdown = setInterval(() => {
@@ -114,24 +112,18 @@ const game = {
       } else {
         player.isVulnerable = true;
       }
-
     }
   },
   animate(playerNum, action) {
-    playerNum = parseInt(playerNum);
+    console.log(playerNum);
+    console.log(action);
+    $(`#${playerNum}`).attr('src', `images/cowboy${this.animations[action][playerNum]}`);
 
-    if (action === 'respawn' && this.players[playerNum].isAlive === true) {
-      return;
-    } else {
-      console.log(playerNum);
-      $(`#${playerNum}`).attr('src', `images/cowboy${this.animations[action][playerNum]}`);
-    }
-
-    if (this.players[playerNum].isAlive === false) {
-      setTimeout(() => {
-        $(`#${playerNum}`).attr('src', `images/cowboy ${this.animations['death'][playerNum]}`);
-      }, 1000);
-    }
+    // if (this.players[playerNum].isAlive === false) {
+    //   setTimeout(() => {
+    //     $(`#${playerNum}`).attr('src', `images/cowboy ${this.animations['death'][playerNum]}`);
+    //   }, 1000);
+    // }
   },
   doAction(playerNum) {
     //console.log('doAction-----------------');
