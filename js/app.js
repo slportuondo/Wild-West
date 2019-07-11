@@ -38,10 +38,10 @@ const game = {
         this.doAction(0);
         this.doAction(1);
         this.findMatchWinner();
+        this.characterAnimation();
       }
     }, 500);
     // Call selected / verified action of both players after timer ends
-
   },
   keypressToAction(pressedKey){
     //console.log('keypressToAction-------------');

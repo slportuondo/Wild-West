@@ -15,6 +15,7 @@ MVP:
     - 7 Rounds (Or best of 7)
       - Each round is comprised of matches
         - Each match is 3 seconds long
+          <!-- pause after each match, until animation plays out -->
         - In each match, players have to select which power they use
           - Power-specific animation will play on each players screen, depending on their respective power selection
           - If a player does not select a power, they will default to using shield (if shield is available)
