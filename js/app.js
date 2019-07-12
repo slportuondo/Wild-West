@@ -11,7 +11,9 @@ const game = {
     reload: ['1Reload.gif', '2Reload.gif' ],
     shield: ['1Shield.gif', '2Shield.gif'],
     death: ['1Death.gif', '2Death.gif'],
-    respawn:['1Respawn.gif', '2Respawn.gif']
+    respawn:['1Respawn.gif', '2Respawn.gif'],
+    cantDo: ['1CantDo.gif', '2CantDo.gif'],
+    noShield: ['1NoShield.gif', '2NoShield.gif']
   },
   points: [0,0],
   round: 1,
@@ -48,6 +50,8 @@ const game = {
         this.animateActions();
         this.animateDeaths();
         this.findMatchWinner();
+        this.players[0].action = '';
+        this.players[1].action = '';
       }
     }, 500);
     // Call selected / verified action of both players after timer ends
@@ -83,10 +87,12 @@ const game = {
     console.log('2 verifyAction-------------------');
     const player = this.players[playerNum];
     if (player.action == 'shoot' && player.ammo == 0) {
-        player.action = 'shield';
+        this.animateError(playerNum);
+        player.action = null;
         // Error sound needed
     } else if (player.action == 'reload' && player.ammo == 2) {
-        player.action = 'shield';
+        this.animateError(playerNum);
+        player.action = null;
         // Error sound needed
     } else if (player.action === '') {
       player.action = 'shield';
@@ -106,7 +112,7 @@ const game = {
         } else {
           player.isVulnerable = false;
         }
-      } else {
+      } else if (player.action === null){
         player.isVulnerable = true;
       }
     }
@@ -140,11 +146,23 @@ const game = {
   animateActions() {
     console.log('5 animateActions-------------------');
 
-    const player1Action = this.players[0].action;
-    const player2Action = this.players[1].action;
-    $('#0').attr('src', `images/cowboy${this.animations[player1Action][0]}`);
-    $('#1').attr('src', `images/cowboy${this.animations[player2Action][1]}`);
-  },             //5
+    const player1 = this.players[0];
+    const player2 = this.players[1];
+    if (player1.action === 'shield' && player1.shield < 1) {
+      $('#0').attr('src', `images/cowboy${this.animations['noShield'][0]}`);
+    } else if (player1.action != null){
+      $('#0').attr('src', `images/cowboy${this.animations[player1.action][0]}`);
+    }
+
+    if (player2.action === 'shield' && player1.shield < 1) {
+      $('#1').attr('src', `images/cowboy${this.animations['noShield'][1]}`);
+    } else if (player2.action != null){
+      $('#1').attr('src', `images/cowboy${this.animations[player2.action][1]}`);
+    }
+  },
+  animateError(playerNum){
+    $(`#${playerNum}`).attr('src', `images/cowboy${this.animations['cantDo'][playerNum]}`);
+  },
   animateDeaths() {
     const player1 = this.players[0];
     const player2 = this.players[1];
@@ -157,13 +175,13 @@ const game = {
           $(`#0`).attr('src', `images/cowboy${this.animations['death'][0]}`);
           setTimeout(() => {
             this.animateRespawn(0);
-          }, 500);
+          }, 1000);
         }
         if (!player2.isAlive) {
           $('#1').attr('src', `images/cowboy${this.animations['death'][1]}`);
           setTimeout(() => {
             this.animateRespawn(1);
-          }, 500);
+          }, 1000);
         }
       }, 850)
     }
@@ -171,7 +189,7 @@ const game = {
   animateRespawn(playerNum){
     console.log('MID Respawn--------------');
       $(`#${playerNum}`).attr('src', `images/cowboy${this.animations['respawn'][playerNum]}`);
-  },                         //6
+  },
   findMatchWinner(){
     console.log('7 findMatchWinner-------------------');
     const p1isAlive= this.players[0].isAlive;
