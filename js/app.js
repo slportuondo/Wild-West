@@ -31,7 +31,11 @@ const game = {
   startCountdown() {
     // Function to create timer that stops after 3 seconds
     this.timer = 3;
+    let timeInterval = 1000
     this.countdown = setInterval(() => {
+      if (timeInterval > 500) {
+        timeInterval -= 50;
+      }
       $('#timer').text(this.timer);
       //console.log(this.timer);
       this.canChoose = true;
@@ -45,15 +49,15 @@ const game = {
         this.canChoose = false;
         this.verifyAction(0); this.verifyAction(1);
         this.editPlayersVulnerability();
+        this.animateActions();
         this.doAction(0);
         this.doAction(1);
-        this.animateActions();
         this.animateDeaths();
         this.findMatchWinner();
         this.players[0].action = '';
         this.players[1].action = '';
       }
-    }, 500);
+    }, timeInterval);
     // Call selected / verified action of both players after timer ends
   },
   keypressToAction(pressedKey){
@@ -83,6 +87,34 @@ const game = {
       }
     }
   },  //1
+  editAmmoDisp(playerNum){
+    let player = this.players[playerNum];
+    let ammoIndex = player.ammo;
+    let ammoIcon = $(`#ammo${ammoIndex}P${playerNum + 1}`);
+
+    if (ammoIcon.attr('src') === 'images/ammoOffIcon.png') {
+      ammoIcon.attr('src', 'images/ammoOnIcon.png');
+    } else {
+      ammoIcon.attr('src', 'images/ammoOffIcon.png');
+    }
+  },
+  resetAmmoDisp(playerNum){
+    $(`#ammo1P${playerNum + 1}`).attr('src', 'images/ammoOnIcon.png');
+    $(`#ammo2P${playerNum + 1}`).attr('src', 'images/ammoOffIcon.png');
+  },
+  editShieldDisp(playerNum){
+    let player = this.players[playerNum];
+    let shieldIndex = player.shield + 1;
+    let shieldIcon = $(`#shield${shieldIndex}P${playerNum + 1}`);
+
+    if (player.shield == 3) {
+      $(`#shield1P${playerNum + 1}`).attr('src', 'images/shieldOnIcon.png');
+      $(`#shield2P${playerNum + 1}`).attr('src', 'images/shieldOnIcon.png');
+      $(`#shield3P${playerNum + 1}`).attr('src', 'images/shieldOnIcon.png');
+    } else {
+      shieldIcon.attr('src', 'images/shieldOffIcon.png');
+    }
+  },
   verifyAction(playerNum) {
     console.log('2 verifyAction-------------------');
     const player = this.players[playerNum];
@@ -129,18 +161,25 @@ const game = {
     }
     switch (player.action) {
       case 'shoot':
+        this.editAmmoDisp(playerNum);
         player.shoot(enemy);
+        this.editShieldDisp(playerNum);
         break;
       case 'reload':
         player.reload();
+        this.editAmmoDisp(playerNum);
+        this.editShieldDisp(playerNum);
         break;
       case 'shield':
         player.useShield();
+        this.editShieldDisp(playerNum);
         break;
       case '':
         player.action = 'shield';
         player.useShield();
         break;
+      default:
+        return;
     }
   },          //4
   animateActions() {
@@ -148,13 +187,14 @@ const game = {
 
     const player1 = this.players[0];
     const player2 = this.players[1];
-    if (player1.action === 'shield' && player1.shield < 1) {
+
+    if (player1.action === 'shield' && player1.shield == 0) {
       $('#0').attr('src', `images/cowboy${this.animations['noShield'][0]}`);
     } else if (player1.action != null){
       $('#0').attr('src', `images/cowboy${this.animations[player1.action][0]}`);
     }
 
-    if (player2.action === 'shield' && player1.shield < 1) {
+    if (player2.action === 'shield' && player1.shield == 0) {
       $('#1').attr('src', `images/cowboy${this.animations['noShield'][1]}`);
     } else if (player2.action != null){
       $('#1').attr('src', `images/cowboy${this.animations[player2.action][1]}`);
@@ -210,11 +250,11 @@ const game = {
   increasePoints(winner) {
     console.log('8 increasePoints-------------------');
 
-    let winMessage = ''
+    let winMessage = '';
     switch (winner) {
       case -1:
         this.round++;
-        winMessage = 'DRAW'
+        winMessage = 'DRAW';
         break;
       case 0:
         this.points[0]++;
@@ -233,12 +273,12 @@ const game = {
     console.log('9 updateDisplay-------------------');
 
     $('#announcer').text(winMessage);
-    if (this.rounds < 8) {
+    if (this.round < 8) {
       setTimeout(() => {
         $('#pointDisplayP1').text(this.points[0]);
         $('#pointDisplayP2').text(this.points[1]);
         $('#announcer').text('Round: ' + this.round);
-      }, 2000);
+      }, 1000);
       setTimeout(() => {
         $('#announcer').text('');
         this.newRound();
@@ -264,6 +304,10 @@ const game = {
     player.shield = 3;
     player.ammo = 1;
     player.action = '';
+    this.resetAmmoDisp(0);
+    this.resetAmmoDisp(1);
+    this.editShieldDisp(0);
+    this.editShieldDisp(1);
   },        //11
   gameOver(){
     console.log('12 gameOver-------------------');
@@ -279,9 +323,14 @@ const game = {
 
   }                     //12
 }
-game.newGame();
+
 
 // Event listeners that listen for keypress
 $(document).keydown((e) => {
   game.keypressToAction(e.which);
+});
+$(document).keypress(function(e) {
+  if(e.which == 32) {
+    game.newGame();
+  }
 });
