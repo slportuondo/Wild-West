@@ -255,7 +255,7 @@ const game = {
     } else {
       winner = 'P2';
     }
-    console.log(`GAME OVER – ${winner} WINS`);
+    $('#announcer').text('WINNER: P1');
   }                     //12
 }
 game.newGame();
