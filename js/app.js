@@ -233,16 +233,17 @@ const game = {
     console.log('9 updateDisplay-------------------');
 
     $('#announcer').text(winMessage);
-    console.log(winMessage)
-    setTimeout(() => {
-      $('#pointDisplayP1').text(this.points[0]);
-      $('#pointDisplayP2').text(this.points[1]);
-      $('#announcer').text('Round: ' + this.round);
-    }, 2000);
-    setTimeout(() => {
-      $('#announcer').text('');
-      this.newRound();
-    }, 4000);
+    if (this.rounds < 8) {
+      setTimeout(() => {
+        $('#pointDisplayP1').text(this.points[0]);
+        $('#pointDisplayP2').text(this.points[1]);
+        $('#announcer').text('Round: ' + this.round);
+      }, 2000);
+      setTimeout(() => {
+        $('#announcer').text('');
+        this.newRound();
+      }, 4000);
+    }
   },     //9
   newRound(){
     console.log('10newRound-------------------');
@@ -269,11 +270,13 @@ const game = {
 
     let winner = null;
     if (this.points[0] > this.points[1]) {
-      winner = 'P1';
+      $('#announcer').text('WINNER: P1');
+    } else if (this.points[0] < this.points[1]){
+      $('#announcer').text('WINNER: P2');
     } else {
-      winner = 'P2';
+      $('#announcer').text('SUDDEN DEATH');
     }
-    $('#announcer').text('WINNER: P1');
+
   }                     //12
 }
 game.newGame();
