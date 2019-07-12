@@ -31,7 +31,7 @@ const game = {
   startCountdown() {
     // Function to create timer that stops after 3 seconds
     this.timer = 3;
-    let timeInterval = 1000
+    let timeInterval = 800;
     this.countdown = setInterval(() => {
       if (timeInterval > 500) {
         timeInterval -= 50;
